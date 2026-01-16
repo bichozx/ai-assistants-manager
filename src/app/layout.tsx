@@ -1,6 +1,6 @@
-// src/app/layout.tsx
 import './globals.css';
 
+import AssistantModal from './components/AssistantModal';
 import { Providers } from './provaiders';
 
 export default function RootLayout({
@@ -11,7 +11,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <AssistantModal />
+        </Providers>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 'use client';
 
 import AssistantCard from './components/AssistandCard';
+import AssistantRow from './components/AssistantRow';
 import EmptyState from './components/EmptyState';
 import { useAssistantStore } from './store/assistant.store';
 import { useAssistantsQuery } from './hooks/useAssistants';
@@ -46,9 +47,9 @@ export default function HomePage() {
       {!data || data.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex flex-col gap-4">
           {data.map((assistant) => (
-            <AssistantCard
+            <AssistantRow
               key={assistant.id}
               assistant={assistant}
               onDelete={() => deleteMutation.mutate(assistant.id)}
