@@ -16,3 +16,16 @@ export interface Assistant {
   audioEnabled: boolean;
   rules: string;
 }
+
+export type AssistantFormValues = {
+  name: string;
+  language: Assistant['language'];
+  tone: Assistant['tone'];
+  responseLength: {
+    short: number;
+    medium: number;
+    long: number;
+  };
+  audioEnabled: boolean;
+  rules: string; // ✅ IMPORTANTE
+};
