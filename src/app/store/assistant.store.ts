@@ -7,7 +7,6 @@ import { create } from 'zustand';
 
 export const useAssistantStore = create<AssistantState & AssistantActions>(
   (set) => ({
-    // =====================
     // STATE
     // =====================
     isModalOpen: false,
@@ -15,7 +14,6 @@ export const useAssistantStore = create<AssistantState & AssistantActions>(
     selectedAssistant: null,
     chats: {},
 
-    // =====================
     // MODAL ACTIONS
     // =====================
     openCreateModal: () =>
@@ -38,7 +36,6 @@ export const useAssistantStore = create<AssistantState & AssistantActions>(
         selectedAssistant: null,
       }),
 
-    // =====================
     // CHAT ACTIONS
     // =====================
     addMessage: (assistantId, message) =>

@@ -12,12 +12,13 @@ export default function StepOne({ onNext }: Props) {
   } = useFormContext<AssistantFormValues>();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Nombre */}
-      <div>
-        <label className="block text-sm font-medium">
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-gray-700">
           Nombre del asistente
         </label>
+
         <input
           {...register('name', {
             required: 'El nombre es obligatorio',
@@ -26,19 +27,31 @@ export default function StepOne({ onNext }: Props) {
               message: 'Mínimo 3 caracteres',
             },
           })}
-          className="mt-1 w-full border rounded-md p-2"
+          placeholder="Ej: Asistente de Ventas"
+          className="
+            w-full rounded-lg border px-3 py-2 text-sm
+            focus:outline-none focus:ring-2 focus:ring-blue-500
+            focus:border-blue-500
+          "
         />
+
         {errors.name && (
           <p className="text-sm text-red-500">{errors.name.message}</p>
         )}
       </div>
 
       {/* Idioma */}
-      <div>
-        <label className="block text-sm font-medium">Idioma</label>
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-gray-700">
+          Idioma
+        </label>
+
         <select
           {...register('language', { required: true })}
-          className="mt-1 w-full border rounded-md p-2"
+          className="
+            w-full rounded-lg border px-3 py-2 text-sm
+            focus:outline-none focus:ring-2 focus:ring-blue-500
+          "
         >
           <option value="Español">Español</option>
           <option value="Inglés">Inglés</option>
@@ -47,11 +60,15 @@ export default function StepOne({ onNext }: Props) {
       </div>
 
       {/* Tono */}
-      <div>
-        <label className="block text-sm font-medium">Tono</label>
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-gray-700">Tono</label>
+
         <select
           {...register('tone', { required: true })}
-          className="mt-1 w-full border rounded-md p-2"
+          className="
+            w-full rounded-lg border px-3 py-2 text-sm
+            focus:outline-none focus:ring-2 focus:ring-blue-500
+          "
         >
           <option value="Formal">Formal</option>
           <option value="Casual">Casual</option>
@@ -60,12 +77,20 @@ export default function StepOne({ onNext }: Props) {
         </select>
       </div>
 
-      {/* Botón */}
-      <div className="flex justify-end mt-6">
+      {/* Acción */}
+      <div className="flex justify-end pt-6">
         <button
+          type="button"
           onClick={onNext}
           disabled={!isValid}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50"
+          className="
+            inline-flex items-center justify-center
+            rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white
+            transition
+            hover:bg-blue-700
+            focus:outline-none focus:ring-2 focus:ring-blue-500
+            disabled:opacity-50 disabled:cursor-not-allowed
+          "
         >
           Siguiente
         </button>

@@ -27,5 +27,5 @@ export type AssistantFormValues = {
     long: number;
   };
   audioEnabled: boolean;
-  rules: string; // ✅ IMPORTANTE
+  rules: string; //  IMPORTANTE
 };

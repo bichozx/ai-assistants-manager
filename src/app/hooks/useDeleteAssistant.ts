@@ -9,7 +9,6 @@ export const useDeleteAssistant = () => {
   return useMutation({
     mutationFn: deleteAssistant,
 
-    // 🔥 OPTIMISTIC UPDATE
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({
         queryKey: ['assistants'],
@@ -27,14 +26,12 @@ export const useDeleteAssistant = () => {
       return { previousAssistants };
     },
 
-    // ❌ Rollback si falla
     onError: (_error, _id, context) => {
       if (context?.previousAssistants) {
         queryClient.setQueryData(['assistants'], context.previousAssistants);
       }
     },
 
-    // 🔄 Sync final
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: ['assistants'],

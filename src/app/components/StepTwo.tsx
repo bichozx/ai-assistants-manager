@@ -10,19 +10,15 @@ interface Props {
 }
 
 export default function StepTwo({ onBack }: Props) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useFormContext<AssistantFormValues>();
+  const { register, handleSubmit, control } =
+    useFormContext<AssistantFormValues>();
 
   const { modalMode, selectedAssistant, closeModal } = useAssistantStore();
 
   const createMutation = useCreateAssistant();
   const updateMutation = useUpdateAssistant();
 
-  // 👀 Observamos los valores en tiempo real
+  // 👀 Valores reactivos
   const short = useWatch({ control, name: 'responseLength.short' }) || 0;
   const medium = useWatch({ control, name: 'responseLength.medium' }) || 0;
   const long = useWatch({ control, name: 'responseLength.long' }) || 0;
@@ -37,88 +33,120 @@ export default function StepTwo({ onBack }: Props) {
 
     if (modalMode === 'create') {
       createMutation.mutate(data, {
-        onSuccess: () => closeModal(),
+        onSuccess: closeModal,
       });
-    } else if (modalMode === 'edit' && selectedAssistant) {
+    }
+
+    if (modalMode === 'edit' && selectedAssistant) {
       updateMutation.mutate(
         { id: selectedAssistant.id, data },
-        {
-          onSuccess: () => closeModal(),
-        }
+        { onSuccess: closeModal }
       );
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <h3 className="font-medium">Longitud de respuestas (%)</h3>
-
-      {/* Short */}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Título */}
       <div>
-        <label className="block text-sm">Cortas</label>
-        <input
-          type="number"
-          {...register('responseLength.short', {
-            required: true,
-            min: 0,
-            max: 100,
-            valueAsNumber: true,
-          })}
-          className="mt-1 w-full border rounded-md p-2"
-        />
+        <h3 className="text-base font-medium text-gray-800">
+          Longitud de respuestas
+        </h3>
+        <p className="text-sm text-gray-500">
+          La suma debe ser exactamente 100%
+        </p>
       </div>
 
-      {/* Medium */}
-      <div>
-        <label className="block text-sm">Medias</label>
-        <input
-          type="number"
-          {...register('responseLength.medium', {
-            required: true,
-            min: 0,
-            max: 100,
-            valueAsNumber: true,
-          })}
-          className="mt-1 w-full border rounded-md p-2"
-        />
+      {/* Inputs */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        {/* Cortas */}
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Cortas
+          </label>
+          <input
+            type="number"
+            {...register('responseLength.short', {
+              min: 0,
+              max: 100,
+              valueAsNumber: true,
+            })}
+            className="
+              w-full rounded-lg border px-3 py-2 text-sm
+              focus:outline-none focus:ring-2 focus:ring-blue-500
+            "
+          />
+        </div>
+
+        {/* Medias */}
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Medias
+          </label>
+          <input
+            type="number"
+            {...register('responseLength.medium', {
+              min: 0,
+              max: 100,
+              valueAsNumber: true,
+            })}
+            className="
+              w-full rounded-lg border px-3 py-2 text-sm
+              focus:outline-none focus:ring-2 focus:ring-blue-500
+            "
+          />
+        </div>
+
+        {/* Largas */}
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Largas
+          </label>
+          <input
+            type="number"
+            {...register('responseLength.long', {
+              min: 0,
+              max: 100,
+              valueAsNumber: true,
+            })}
+            className="
+              w-full rounded-lg border px-3 py-2 text-sm
+              focus:outline-none focus:ring-2 focus:ring-blue-500
+            "
+          />
+        </div>
       </div>
 
-      {/* Long */}
-      <div>
-        <label className="block text-sm">Largas</label>
-        <input
-          type="number"
-          {...register('responseLength.long', {
-            required: true,
-            min: 0,
-            max: 100,
-            valueAsNumber: true,
-          })}
-          className="mt-1 w-full border rounded-md p-2"
-        />
-      </div>
-
-      {/* Validación matemática */}
-      <p
-        className={`text-sm ${
-          isValidTotal ? 'text-green-600' : 'text-red-500'
+      {/* Validación visual */}
+      <div
+        className={`rounded-lg border px-3 py-2 text-sm ${
+          isValidTotal
+            ? 'border-green-500 text-green-600 bg-green-50'
+            : 'border-red-500 text-red-600 bg-red-50'
         }`}
       >
-        Total: {total}% {!isValidTotal && '(Debe sumar 100%)'}
-      </p>
-
-      {/* Audio */}
-      <div className="flex items-center gap-2">
-        <input type="checkbox" {...register('audioEnabled')} />
-        <label className="text-sm">Habilitar respuestas de audio</label>
+        Total: {total}% {!isValidTotal && '· Debe sumar 100%'}
       </div>
 
-      {/* Botones */}
-      <div className="flex justify-between pt-6">
+      {/* Audio */}
+      <label className="flex items-center gap-2 text-sm text-gray-700">
+        <input
+          type="checkbox"
+          {...register('audioEnabled')}
+          className="rounded border-gray-300"
+        />
+        Habilitar respuestas de audio
+      </label>
+
+      {/* Acciones */}
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between pt-6">
         <button
           type="button"
           onClick={onBack}
-          className="px-4 py-2 border rounded-md"
+          className="
+            rounded-lg border px-4 py-2 text-sm
+            hover:bg-gray-50
+          "
         >
           Atrás
         </button>
@@ -126,7 +154,12 @@ export default function StepTwo({ onBack }: Props) {
         <button
           type="submit"
           disabled={!isValidTotal || isLoading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
+          className="
+            rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white
+            transition
+            hover:bg-blue-700
+            disabled:opacity-50 disabled:cursor-not-allowed
+          "
         >
           {isLoading ? 'Guardando...' : 'Guardar'}
         </button>
