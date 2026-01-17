@@ -17,18 +17,17 @@ export default function AssistantTrainingPage() {
 
   const messages = chats[id] ?? [];
 
-  const [rules, setRules] = useState('');
+  // 🔹 Estado solo cuando el usuario edita
+  const [editedRules, setEditedRules] = useState<string | null>(null);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-
-  // Inicializar rules cuando carga el asistente
-  if (assistant && rules === '') {
-    setRules(assistant.rules);
-  }
 
   if (isLoading || !assistant) {
     return <p className="p-6">Cargando asistente...</p>;
   }
+
+  // 🔹 Fuente de verdad
+  const rules = editedRules ?? assistant.rules ?? '';
 
   const handleSaveRules = () => {
     updateMutation.mutate({
@@ -43,30 +42,32 @@ export default function AssistantTrainingPage() {
   const handleSend = () => {
     if (!input.trim()) return;
 
-    const userMessage = {
+    addMessage(id, {
       id: crypto.randomUUID(),
-      sender: 'user' as const,
+      sender: 'user',
       content: input,
       createdAt: new Date(),
-    };
+    });
 
-    addMessage(id, userMessage);
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response =
-        mockResponses[Math.floor(Math.random() * mockResponses.length)];
+    setTimeout(
+      () => {
+        const response =
+          mockResponses[Math.floor(Math.random() * mockResponses.length)];
 
-      addMessage(id, {
-        id: crypto.randomUUID(),
-        sender: 'assistant',
-        content: response,
-        createdAt: new Date(),
-      });
+        addMessage(id, {
+          id: crypto.randomUUID(),
+          sender: 'assistant',
+          content: response,
+          createdAt: new Date(),
+        });
 
-      setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+        setIsTyping(false);
+      },
+      1000 + Math.random() * 1000
+    );
   };
 
   return (
@@ -79,13 +80,13 @@ export default function AssistantTrainingPage() {
         </p>
       </div>
 
-      {/* Rules */}
+      {/* Entrenamiento */}
       <section className="border rounded-xl p-4 space-y-2">
         <h2 className="font-medium">Entrenamiento</h2>
 
         <textarea
           value={rules}
-          onChange={(e) => setRules(e.target.value)}
+          onChange={(e) => setEditedRules(e.target.value)}
           rows={4}
           className="w-full border rounded-md p-2"
         />
@@ -97,9 +98,15 @@ export default function AssistantTrainingPage() {
         >
           {updateMutation.isPending ? 'Guardando...' : 'Guardar'}
         </button>
+
+        {updateMutation.isSuccess && (
+          <p className="text-sm text-green-600">
+            Entrenamiento guardado correctamente
+          </p>
+        )}
       </section>
 
-      {/* Chat */}
+      {/* Chat simulado */}
       <section className="border rounded-xl p-4 flex flex-col h-[400px]">
         <h2 className="font-medium mb-2">Chat Simulado</h2>
 
@@ -129,12 +136,14 @@ export default function AssistantTrainingPage() {
             className="flex-1 border rounded-md p-2"
             placeholder="Escribe un mensaje"
           />
+
           <button
             onClick={handleSend}
             className="px-4 py-2 bg-blue-600 text-white rounded-md"
           >
             Enviar
           </button>
+
           <button
             onClick={() => resetChat(id)}
             className="px-3 py-2 border rounded-md"

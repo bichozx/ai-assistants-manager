@@ -47,7 +47,7 @@ export default function HomePage() {
       {!data || data.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {data.map((assistant) => (
             <AssistantRow
               key={assistant.id}

@@ -59,6 +59,7 @@ export default function AssistantModal() {
         <h2 className="text-xl font-semibold mb-4">
           {modalMode === 'create' ? 'Crear Asistente' : 'Editar Asistente'}
         </h2>
+        <p className="text-sm text-gray-500 mb-2">Paso {step} de 2</p>
 
         <FormProvider {...methods}>
           {step === 1 && <StepOne onNext={() => setStep(2)} />}
