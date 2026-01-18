@@ -15,7 +15,6 @@ export default function AssistantTrainingPage() {
   const { chats, addMessage, resetChat } = useAssistantStore();
   const messages = chats[id] ?? [];
 
-  // Estado local
   const [editedRules, setEditedRules] = useState<string | null>(null);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -24,7 +23,6 @@ export default function AssistantTrainingPage() {
     return <p className="p-6 text-center">Cargando asistente...</p>;
   }
 
-  // Fuente de verdad
   const rules = editedRules ?? assistant.rules ?? '';
 
   const handleSaveRules = () => {
@@ -64,7 +62,7 @@ export default function AssistantTrainingPage() {
 
         setIsTyping(false);
       },
-      1000 + Math.random() * 1000
+      1000 + Math.random() * 1000,
     );
   };
 

@@ -18,7 +18,7 @@ export default function StepTwo({ onBack }: Props) {
   const createMutation = useCreateAssistant();
   const updateMutation = useUpdateAssistant();
 
-  // 👀 Valores reactivos
+  // Valores reactivos
   const short = useWatch({ control, name: 'responseLength.short' }) || 0;
   const medium = useWatch({ control, name: 'responseLength.medium' }) || 0;
   const long = useWatch({ control, name: 'responseLength.long' }) || 0;
@@ -40,7 +40,7 @@ export default function StepTwo({ onBack }: Props) {
     if (modalMode === 'edit' && selectedAssistant) {
       updateMutation.mutate(
         { id: selectedAssistant.id, data },
-        { onSuccess: closeModal }
+        { onSuccess: closeModal },
       );
     }
   };
